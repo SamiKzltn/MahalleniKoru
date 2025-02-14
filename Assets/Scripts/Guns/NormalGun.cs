@@ -6,6 +6,7 @@ public class NormalGun : BaseGun
     private UIManager uiManager => UIManager.Instance;
     private AudioManager audioManager => AudioManager.Instance;
     private ParticalManager particalManager => ParticalManager.Instance;
+    private PlayerScript playerScript => PlayerScript.Instance;
 
     protected override void Initialize()
     {
@@ -75,8 +76,8 @@ public class NormalGun : BaseGun
             if (hit.transform.tag == "Dusman")
             {
                 particalManager.BloodHitParticalls(hit);
-                PlayerScript.playerMoney += 1000;
-                Debug.Log(PlayerScript.playerMoney);
+                playerScript.playerMoney += 1000;
+                Debug.Log(playerScript.playerMoney);
             }
             else if (hit.transform.tag == "Devrilebilir")
             {

@@ -9,6 +9,7 @@ public class Gun_Scriptable : ScriptableObject
     public string gunName;
     
     public int Range;
+    public int Price;
     public int magazineCapacity;
     public float shotFrequency;
 

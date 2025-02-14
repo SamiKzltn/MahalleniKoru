@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,10 +11,15 @@ public class Shop : MonoBehaviour
     public static GameController Instance;
 
     [SerializeField] protected Gun_Scriptable Gun_Scriptable;
+    [SerializeField] protected Gun_Scriptable[] allguns;
 
     public PlayerScript player;
-    public TextMeshProUGUI moneyText;
-    public Button buyAKButton, buySniperButton;
+    public Button buyButton;
+
+    [SerializeField] private UnityEngine.Color purchasedColor = UnityEngine.Color.green; // Satýn alýndýðýnda olacak renk
+    [SerializeField] private UnityEngine.Color defaultColor = UnityEngine.Color.white; // Varsayýlan renk
+
+    [Header("Texts")]
     public TextMeshProUGUI shotgunPriceTag;
     public TextMeshProUGUI magnumPriceTag;
     public TextMeshProUGUI sniperPriceTag;
@@ -29,35 +35,32 @@ public class Shop : MonoBehaviour
     void Start()
     {
         Begining();
-        AkButton.onClick.AddListener(PurchaseWeapon);
-        SniperButton.onClick.AddListener(PurchaseWeapon);
+        buyButton.onClick.AddListener(PurchaseWeapon);
         UpdateButtonState();
-        UpdateUI();
     }
-    [SerializeField] private Button AkButton, SniperButton; // Satýn alma butonu
-    [SerializeField] private int weaponPrice = 100; // Silahýn fiyatý
     private void PurchaseWeapon()
     {
-        if (player.CanAfford(weaponPrice)) // Oyuncunun yeterli parasý var mý?
+        if(Gun_Scriptable.Is_Purchished == true)
         {
-            player.SpendMoney(weaponPrice); // Parayý düþ
-            Gun_Scriptable.Is_Purchished = true; // Silahýn satýn alýndýðýný iþaretle
-            //buyButton.interactable = false; // Butonu devre dýþý býrak
-
-            Debug.Log($"{Gun_Scriptable.gunName} satýn alýndý!");
+            Debug.Log("Zaten Satin Alindi");
         }
         else
         {
-            Debug.Log("Yeterli paranýz yok!");
+            if (player.CanAfford(Gun_Scriptable.Price)) // Oyuncunun yeterli parasý var mý?
+            {
+                player.SpendMoney(Gun_Scriptable.Price); // Parayý düþ
+                Gun_Scriptable.Is_Purchished = true; // Silahýn satýn alýndýðýný iþaretle
+                UpdateButtonState();
+                Debug.Log($"{Gun_Scriptable.gunName} satýn alýndý!");
+            }
+            else
+            {
+                Debug.Log("Yeterli paranýz yok!");
+            }
         }
     }
-
     private void UpdateButtonState()
     {
-        //buyButton.interactable = !Gun_Scriptable.Is_Purchished; // Satýn alýndýysa butonu kapat
-    }
-    void UpdateUI()
-    {
-        moneyText.text = "Para: " + PlayerScript.playerMoney + " $";
+        buyButton.interactable = !Gun_Scriptable.Is_Purchished; // Satýn alýndýysa butonu kapat
     }
 }
