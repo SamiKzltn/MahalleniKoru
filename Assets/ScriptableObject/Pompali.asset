@@ -16,4 +16,6 @@ MonoBehaviour:
   Range: 50
   magazineCapacity: 2
   shotFrequency: 0.7
+  Image: {fileID: 21300000, guid: d2c21304ebf19454fa422fa859e47e85, type: 3}
+  Is_Purchished: 1
   GunSound: {fileID: 8300000, guid: a4b11d6d00608f14e827b423676d653d, type: 3}

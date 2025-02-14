@@ -17,7 +17,11 @@ public class UIManager : MonoBehaviour
     public MonoBehaviour playerController;
 
     public GameObject targetObject;
-    public MonoBehaviour targetScript;
+    public MonoBehaviour targetScript1;
+    public MonoBehaviour targetScript2;
+    public MonoBehaviour targetScript3;
+    public MonoBehaviour targetScript4;
+
 
     private void Awake()
     {
@@ -50,9 +54,21 @@ public class UIManager : MonoBehaviour
         Cursor.visible = isActive;
 
         // Menü açýldýðýnda belirli bir scripti kapat
-        if (targetScript != null)
+        if (targetScript1 != null)
         {
-            targetScript.enabled = !isActive; // Menü açýksa script kapanýr, menü kapalýysa açýlýr
+            targetScript1.enabled = !isActive; // Menü açýksa script kapanýr, menü kapalýysa açýlýr
+        }
+        if (targetScript2 != null)
+        {
+            targetScript2.enabled = !isActive; // Menü açýksa script kapanýr, menü kapalýysa açýlýr
+        }
+        if (targetScript3 != null)
+        {
+            targetScript3.enabled = !isActive; // Menü açýksa script kapanýr, menü kapalýysa açýlýr
+        }
+        if (targetScript4 != null)
+        {
+            targetScript4.enabled = !isActive; // Menü açýksa script kapanýr, menü kapalýysa açýlýr
         }
         if (playerController != null)
         {

@@ -15,5 +15,12 @@ public class PlayerScript : MonoBehaviour
     public GameObject weapon3;
     public GameObject weapon4;
 
-
+    public bool CanAfford(int weaponPrice)
+    {
+        return playerMoney >= weaponPrice;
+    }
+    public void SpendMoney(int weaponPrice) 
+    {
+        playerMoney -= weaponPrice;
+    }
 }

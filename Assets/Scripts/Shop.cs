@@ -7,10 +7,13 @@ using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
+    public static GameController Instance;
+
+    [SerializeField] protected Gun_Scriptable Gun_Scriptable;
+
     public PlayerScript player;
     public TextMeshProUGUI moneyText;
-    public Button buyAKButton, buyShotgunButton, buySniperButton;
-
+    public Button buyAKButton, buySniperButton;
     public TextMeshProUGUI shotgunPriceTag;
     public TextMeshProUGUI magnumPriceTag;
     public TextMeshProUGUI sniperPriceTag;
@@ -26,15 +29,33 @@ public class Shop : MonoBehaviour
     void Start()
     {
         Begining();
+        AkButton.onClick.AddListener(PurchaseWeapon);
+        SniperButton.onClick.AddListener(PurchaseWeapon);
+        UpdateButtonState();
         UpdateUI();
-
-        // Butonlara týklanýnca silah satýn alma iþlemi gerçekleþsin
     }
-
-    void BuyWeapon(string weaponName, int cost)
+    [SerializeField] private Button AkButton, SniperButton; // Satýn alma butonu
+    [SerializeField] private int weaponPrice = 100; // Silahýn fiyatý
+    private void PurchaseWeapon()
     {
+        if (player.CanAfford(weaponPrice)) // Oyuncunun yeterli parasý var mý?
+        {
+            player.SpendMoney(weaponPrice); // Parayý düþ
+            Gun_Scriptable.Is_Purchished = true; // Silahýn satýn alýndýðýný iþaretle
+            //buyButton.interactable = false; // Butonu devre dýþý býrak
+
+            Debug.Log($"{Gun_Scriptable.gunName} satýn alýndý!");
+        }
+        else
+        {
+            Debug.Log("Yeterli paranýz yok!");
+        }
     }
 
+    private void UpdateButtonState()
+    {
+        //buyButton.interactable = !Gun_Scriptable.Is_Purchished; // Satýn alýndýysa butonu kapat
+    }
     void UpdateUI()
     {
         moneyText.text = "Para: " + PlayerScript.playerMoney + " $";
