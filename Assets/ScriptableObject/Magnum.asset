@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42023d92d99f51f43908a6762981aa36, type: 3}
   m_Name: Magnum
   m_EditorClassIdentifier: 
+  ID: 2030
   gunName: Magnum
   Range: 50
+  Price: 0
   magazineCapacity: 8
   shotFrequency: 1
   Image: {fileID: 21300000, guid: 26f2cd2c88388ec4e8faa6dc82cb73b4, type: 3}

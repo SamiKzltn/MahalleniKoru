@@ -6,6 +6,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "NewGun", menuName = "Gun")]
 public class Gun_Scriptable : ScriptableObject
 {
+    public int ID;
     public string gunName;
     
     public int Range;

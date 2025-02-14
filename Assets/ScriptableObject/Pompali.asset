@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42023d92d99f51f43908a6762981aa36, type: 3}
   m_Name: Pompali
   m_EditorClassIdentifier: 
+  ID: 2040
   gunName: Pompali
   Range: 50
   Price: 0
