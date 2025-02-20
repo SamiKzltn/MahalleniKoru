@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class AmmoScripts : MonoBehaviour
 {
-    string[] GunTypes =
+    int[] GunID =
     {
-        "Magnum",
-        "Pompali",
-        "Sniper",
-        "Taramali"
+        2030,
+        2040,
+        2050,
+        2020
     };
 
     int[] AmmoTypes =
@@ -25,14 +25,14 @@ public class AmmoScripts : MonoBehaviour
 
     public Image Gun_Image;
 
-    public string Gun_Type;
+    public int gunId;
     public int Ammo_Type;
     public int Pointi;
     
     void Start()
     {
-        int NumberKey = Random.Range(0, GunTypes.Length);
-        Gun_Type = GunTypes[NumberKey];
+        int NumberKey = Random.Range(0, 4);
+        gunId = GunID[NumberKey];
         Ammo_Type = AmmoTypes[Random.Range(0, AmmoTypes.Length)];
         Gun_Image.sprite = Gun_Sprites[NumberKey];
 

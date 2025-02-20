@@ -23,15 +23,6 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         _currentWeapons = new GameObject[2];
-        if (!PlayerPrefs.HasKey("OyunBasladi"))
-        {
-            PlayerPrefs.SetInt("Taramali_Mermi", 980);
-            PlayerPrefs.SetInt("Pompali_Mermi", 15);
-            PlayerPrefs.SetInt("Magnum_Mermi", 50);
-            PlayerPrefs.SetInt("Sniper_Mermi", 30);
-
-            PlayerPrefs.SetInt("OyunBasladi", 1);
-        }
 
     }
     void Update()

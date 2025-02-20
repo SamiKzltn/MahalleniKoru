@@ -20,6 +20,8 @@ public abstract class BaseGun : MonoBehaviour
     public GameObject Scope;
 
     [Header("Silah Ayarlari")]
+    [SerializeField] protected int gunAllBullet;
+    [SerializeField] protected int gunid;
     [SerializeField] protected int MaxMermiSayisi;
     [SerializeField] protected int kalanMermi = 1;
 

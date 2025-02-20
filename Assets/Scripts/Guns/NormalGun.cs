@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,25 +8,40 @@ public class NormalGun : BaseGun
     private AudioManager audioManager => AudioManager.Instance;
     private ParticalManager particalManager => ParticalManager.Instance;
     private PlayerScript playerScript => PlayerScript.Instance;
+    private SaveLoadSystem saveLoadSystem => SaveLoadSystem.Instance;
+    public PlayerData _playerData { get; set; }
+    public List<Weapon> weaponList
+    {
+        get
+        {
+            return _playerData.allweapons;
+        }
+        set 
+        {
+            _playerData.allweapons = value;
+        }
+    }
+
+    Weapon _weapon;
 
     protected override void Initialize()
     {
         SetAnimEvent();
         benimCam = transform.GetComponentInParent<Camera>();
-
         View = benimCam.fieldOfView;
         Scope.SetActive(false);
 
-        //Sileceksin Sonra
-        Debug.Log(CommonData.GetAmmo("Taramali_Mermi"));
-        Debug.Log(CommonData.GetAmmo("Magnum_Mermi"));
-        Debug.Log(CommonData.GetAmmo("Pompali_Mermi"));
-        Debug.Log(CommonData.GetAmmo("Sniper_Mermi"));
-        
-
-
-        MaxMermiSayisi = CommonData.GetAmmo(Gun_Scriptable.gunName + "_Mermi", 50); // Varsayýlan 50 olsun
-        kalanMermi = CommonData.GetAmmo(Gun_Scriptable.gunName + "_KalanMermi", 0); // Varsayýlan 0 olsun
+        // Silah ve mermi verilerini JSON sisteminden al
+        _weapon = saveLoadSystem.weaponList.Find(w => w.ID == Gun_Scriptable.ID);
+        gunid = _weapon.ID;
+        gunAllBullet = _weapon.totalAmmo;
+        Debug.Log(Gun_Scriptable.ID);
+        foreach (var weapon in saveLoadSystem.weaponList)
+        {
+            Debug.Log(weapon.ID);
+        }
+        MaxMermiSayisi = _weapon != null ? _weapon.totalAmmo : 50; // Varsayýlan 50
+        kalanMermi = _weapon != null ? _weapon.magazineAmmo : 0; // Varsayýlan 0
 
         // Þarjörü doldur ve kalan mermiyi ayarla
         if (kalanMermi < Gun_Scriptable.magazineCapacity)
@@ -34,13 +50,8 @@ public class NormalGun : BaseGun
             kalanMermi += doldurulacakMermi;
             MaxMermiSayisi -= doldurulacakMermi;
         }
-
         // UI Güncelle
         uiManager.ShowAllAmmo(MaxMermiSayisi, kalanMermi);
-
-        // Þarjör bilgilerini PlayerPrefs'e kaydet
-        CommonData.AmmoSave(Gun_Scriptable.gunName + "_Mermi", MaxMermiSayisi);
-        CommonData.AmmoSave(Gun_Scriptable.gunName + "_KalanMermi", kalanMermi);
     }
     protected virtual void SetAnimEvent()
     {
@@ -88,7 +99,6 @@ public class NormalGun : BaseGun
             {
                 particalManager.ObjectHitParticalls(hit);
             }
-            Debug.Log("Hit: " + hit.transform.name);
         }
     }
     protected override void Loot()
@@ -99,7 +109,8 @@ public class NormalGun : BaseGun
         {
             if (hit.transform.gameObject.CompareTag("Mermi"))
             {
-                AmmoKayit(hit.transform.gameObject.GetComponent<AmmoScripts>().Gun_Type, hit.transform.gameObject.GetComponent<AmmoScripts>().Ammo_Type);
+                AmmoKayit(hit.transform.gameObject.GetComponent<AmmoScripts>().gunId, hit.transform.gameObject.GetComponent<AmmoScripts>().Ammo_Type);
+                Debug.Log(hit.transform.gameObject.GetComponent<AmmoScripts>().Ammo_Type);
                 AmmoBoxSpawner.DestroyPoints(hit.transform.gameObject.GetComponent<AmmoScripts>().Pointi);
                 Destroy(hit.transform.gameObject);
                 AmmoBoxSpawner.HowMuchExits--;
@@ -137,6 +148,7 @@ public class NormalGun : BaseGun
         CommonData.AmmoSave(Gun_Scriptable.gunName + "_Mermi", MaxMermiSayisi);
 
         animatorum.Play("Reload");
+        Save();
     }
     protected override void ZoomIn()
     {
@@ -158,55 +170,34 @@ public class NormalGun : BaseGun
     {
         audioManager.PlayEffect(reloadSesi);
     }
-    public virtual void AmmoKayit(string guntype, int ammo_number)
-    { 
-        int last;
-        last = CommonData.GetAmmo(guntype + "_Mermi");
-        switch (guntype)
-        {
-            case "Taramali":
-                last += ammo_number;
-                CommonData.AmmoSave("Taramali_Mermi", last);
-                if (Gun_Scriptable.gunName == guntype)
-                {
-                    uiManager.ShowAllAmmo(last, kalanMermi);
-                    MaxMermiSayisi = last;
-                }
-                break;
-            case "Pompali":
-                last += ammo_number;
-                CommonData.AmmoSave("Pompali_Mermi", last);
-                if (Gun_Scriptable.gunName == guntype)
-                {
-                    uiManager.ShowAllAmmo(last, kalanMermi);
-                    MaxMermiSayisi = last;
-                }
-                break;
-            case "Magnum":
-                last += ammo_number;
-                CommonData.AmmoSave("Magnum_Mermi", last);
-                if (Gun_Scriptable.gunName == guntype)
-                {
-                    uiManager.ShowAllAmmo(last, kalanMermi);
-                    MaxMermiSayisi = last;
-                }
-                break;
-            case "Sniper":
-                last += ammo_number;
-                CommonData.AmmoSave("Sniper_Mermi", last);
-                if (Gun_Scriptable.gunName == guntype)
-                {
-                    uiManager.ShowAllAmmo(last, kalanMermi);
-                    MaxMermiSayisi = last;
-                }
-                break;
-        }
+    protected void AmmoKayit(int gunid2, int ammo_number)
+    {
+        //_weapon = saveLoadSystem.weaponList.Find(w => w.ID == Gun_Scriptable.ID);
 
+        foreach (Weapon weapon in saveLoadSystem.weaponList) 
+        {
+            if (weapon.ID == gunid2)
+            {
+                if(gunid == gunid2)
+                {
+                    MaxMermiSayisi += ammo_number;
+                    Save();
+                    uiManager.ShowAllAmmo(MaxMermiSayisi, kalanMermi);
+                }
+                else
+                {
+                    weapon.totalAmmo += ammo_number;
+                    Save();
+                }
+            }
+        }
     }
     protected override void WeaponChange()
     {
-        MaxMermiSayisi = CommonData.GetAmmo(Gun_Scriptable.gunName + "_Mermi", 50); // Varsayýlan 50 olsun
-        kalanMermi = CommonData.GetAmmo(Gun_Scriptable.gunName + "_KalanMermi", 0); // Varsayýlan 0 olsun
+        Save();
+        Weapon _weapon = saveLoadSystem.weaponList.Find(w => w.ID == Gun_Scriptable.ID);
+        MaxMermiSayisi = _weapon != null ? _weapon.totalAmmo : 50; // Varsayýlan 50
+        kalanMermi = _weapon != null ? _weapon.magazineAmmo : 0; // Varsayýlan 0
 
         if (kalanMermi < Gun_Scriptable.magazineCapacity)
         {
@@ -216,5 +207,19 @@ public class NormalGun : BaseGun
         }
 
         uiManager.ShowAllAmmo(MaxMermiSayisi, kalanMermi);
+    }
+
+    protected void Save()
+    {
+        List<Weapon> allWeaponsList = saveLoadSystem.weaponList; // Örneðin tüm silahlarý çeken fonksiyon
+
+        foreach (Weapon weapon1 in allWeaponsList)
+        {
+            if (weapon1.ID == gunid)
+            {
+                weapon1.totalAmmo = MaxMermiSayisi;
+                weapon1.magazineAmmo = kalanMermi;
+            }
+        }
     }
 }

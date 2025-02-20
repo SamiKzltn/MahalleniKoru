@@ -7,12 +7,12 @@ public class PlayerScript : MonoBehaviour
     public static PlayerScript Instance;
 
     public int playerMoney; // Oyuncunun para miktarý
-    public Dictionary<int, int> AllAmmo; // Toplam mermi miktarý
-    public Dictionary<int, int> MagazineAmmo; // Þarjördeki mermi miktarý
+    public Dictionary<int, int> AllAmmo;
+    public Dictionary<int, int> MagazineAmmo;
     public Vector3 position;
+    
 
     // Silahlar için bir liste oluþturduk
-    public List<Weapon> weapons;
 
     private void Awake()
     {
@@ -23,27 +23,8 @@ public class PlayerScript : MonoBehaviour
         }
         Instance = this;
 
-        // Baþlangýç silahlarý ve mermileri
-        if (weapons == null)
-        {
-            weapons = new List<Weapon>
-            {
-                new Weapon(2020,"Taramali",120,30),
-                new Weapon(2030,"Magnum",130,8),
-                new Weapon(2040,"Pompali",140,2),
-                new Weapon(2050,"Sniper",150,5)
-            };
-        }
-
-        // Ammo ve MagazineAmmo baþlangýç verilerini oluþturma
         AllAmmo = new Dictionary<int, int>();
         MagazineAmmo = new Dictionary<int, int>();
-
-        for (int i = 0; i < weapons.Count; i++)
-        {
-            AllAmmo.Add(i, weapons[i].totalAmmo); // Silahlarýn toplam mermi miktarýný kaydet
-            MagazineAmmo.Add(i, weapons[i].magazineAmmo); // Þarjördeki mermi miktarýný kaydet
-        }
     }
 
     // Para kontrolü
@@ -73,6 +54,10 @@ public class PlayerScript : MonoBehaviour
         if (MagazineAmmo.ContainsKey(weaponIndex))
         {
             MagazineAmmo[weaponIndex] = ammoCount;
+        }
+        else
+        {
+            Debug.LogWarning("Þarjör için Silah ID'si bulunamadý: " + weaponIndex);
         }
     }
 }

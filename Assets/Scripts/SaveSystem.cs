@@ -1,6 +1,4 @@
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class SaveSystem
@@ -14,6 +12,7 @@ public static class SaveSystem
 
     public static void Save(string saveString)
     {
+        Debug.Log(SAVE_FOLDER);
         File.WriteAllText(SAVE_FOLDER, saveString);
     }
 

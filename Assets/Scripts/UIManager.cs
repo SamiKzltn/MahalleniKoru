@@ -88,7 +88,6 @@ public class UIManager : MonoBehaviour
 
     public void ShowAllAmmo(int MaxMermiSayisi, int kalanMermi)
     {
-
         ToplamMermiSayisiText.text = MaxMermiSayisi.ToString();
         KalanMermiSayisiText.text = kalanMermi.ToString();
     }
