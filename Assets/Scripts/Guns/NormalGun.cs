@@ -92,11 +92,9 @@ public class NormalGun : BaseGun
                 if (death) playerScript.playerMoney += 1000;
 
             }
-
-            if (hit.transform.tag == "Devrilebilir")
+            else if (hit.transform.TryGetComponent(out IDamageable component)) 
             {
-                Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
-                rb.AddForce(benimCam.transform.forward * 10);
+                component.Hit(50);
             }
             else
             {

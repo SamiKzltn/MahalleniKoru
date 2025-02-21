@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] protected Gun_Scriptable[] Gun_Scriptable;
     [SerializeField] private Image[] weaponImages;
+    [SerializeField] private Image HealthImage;
 
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI ToplamMermiSayisiText;
@@ -98,9 +99,9 @@ public class UIManager : MonoBehaviour
         KalanMermiSayisiText.text = kalanMermi.ToString();
     }
 
-    public void HouseHealthUpdate(int house)
+    public void HouseHealthUpdate(float house)
     {
-        HouseHealth.text = house.ToString();
+        HealthImage.fillAmount = house/500;
     }
     public void FixingTheBuyButtons()
     {
