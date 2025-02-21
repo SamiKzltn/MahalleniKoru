@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     public GameObject[] Weapons;
     public GameObject[] _currentWeapons;
     private int _activeWeaponIndex = -1;
+    public Transform Player;
 
     private void Awake()
     {
@@ -23,7 +24,6 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         _currentWeapons = new GameObject[2];
-
     }
     void Update()
     {

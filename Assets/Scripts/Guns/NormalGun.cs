@@ -9,6 +9,7 @@ public class NormalGun : BaseGun
     private ParticalManager particalManager => ParticalManager.Instance;
     private PlayerScript playerScript => PlayerScript.Instance;
     private SaveLoadSystem saveLoadSystem => SaveLoadSystem.Instance;
+    //private BotScript botScript => BotScript.Instance;
     public PlayerData _playerData { get; set; }
     public List<Weapon> weaponList
     {
@@ -16,7 +17,7 @@ public class NormalGun : BaseGun
         {
             return _playerData.allweapons;
         }
-        set 
+        set
         {
             _playerData.allweapons = value;
         }
@@ -84,13 +85,15 @@ public class NormalGun : BaseGun
         RaycastHit hit;
         if (Physics.Raycast(benimCam.transform.position, benimCam.transform.forward, out hit, Gun_Scriptable.Range))
         {
-            if (hit.transform.tag == "Dusman")
+            if (hit.transform.TryGetComponent(out IDamageable damageable))
             {
                 particalManager.BloodHitParticalls(hit);
-                playerScript.playerMoney += 1000;
-                Debug.Log(playerScript.playerMoney);
+                bool death = damageable.Hit(50);
+                if (death) playerScript.playerMoney += 1000;
+
             }
-            else if (hit.transform.tag == "Devrilebilir")
+
+            if (hit.transform.tag == "Devrilebilir")
             {
                 Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
                 rb.AddForce(benimCam.transform.forward * 10);
@@ -156,7 +159,7 @@ public class NormalGun : BaseGun
         benimCam.cullingMask = ~(1 << 6);
         benimCam.fieldOfView = zoomView;
         Aim.SetActive(false);
-        Scope.SetActive(true);        
+        Scope.SetActive(true);
     }
     protected override void ZoomOut()
     {
@@ -174,11 +177,11 @@ public class NormalGun : BaseGun
     {
         //_weapon = saveLoadSystem.weaponList.Find(w => w.ID == Gun_Scriptable.ID);
 
-        foreach (Weapon weapon in saveLoadSystem.weaponList) 
+        foreach (Weapon weapon in saveLoadSystem.weaponList)
         {
             if (weapon.ID == gunid2)
             {
-                if(gunid == gunid2)
+                if (gunid == gunid2)
                 {
                     MaxMermiSayisi += ammo_number;
                     Save();

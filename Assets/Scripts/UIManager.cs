@@ -17,6 +17,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI ToplamMermiSayisiText;
     [SerializeField] TextMeshProUGUI KalanMermiSayisiText;
     [SerializeField] TextMeshProUGUI MoneyText;
+    [SerializeField] TextMeshProUGUI HouseHealth;
+    [SerializeField] TextMeshProUGUI PersonHealth;
 
     [Header("Buttons")]
     [SerializeField] protected KeyCode m_buyMenu = KeyCode.B;
@@ -94,6 +96,11 @@ public class UIManager : MonoBehaviour
     public void JustMagazine(int kalanMermi)
     {
         KalanMermiSayisiText.text = kalanMermi.ToString();
+    }
+
+    public void HouseHealthUpdate(int house)
+    {
+        HouseHealth.text = house.ToString();
     }
     public void FixingTheBuyButtons()
     {

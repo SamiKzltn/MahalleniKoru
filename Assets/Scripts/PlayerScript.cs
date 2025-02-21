@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour
 {
     public static PlayerScript Instance;
 
+    public int Health;
     public int playerMoney; // Oyuncunun para miktarý
     public Dictionary<int, int> AllAmmo;
     public Dictionary<int, int> MagazineAmmo;
@@ -25,6 +26,8 @@ public class PlayerScript : MonoBehaviour
 
         AllAmmo = new Dictionary<int, int>();
         MagazineAmmo = new Dictionary<int, int>();
+
+        Health = 100;
     }
 
     // Para kontrolü
