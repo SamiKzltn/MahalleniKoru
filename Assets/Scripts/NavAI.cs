@@ -9,7 +9,7 @@ public class NavAI : MonoBehaviour
     public float attackRange = 30f; // Oyuncuya yaklaþma mesafesi
     public float attackSpeed = 2f; // Saldýrý hýzýnýn belirlenmesi
     private bool isAttackingPlayer = false; // Oyuncuya saldýrýyor mu?
-
+    private Vector3 _endNavigationTarget;
 
     void Start()
     {
@@ -30,14 +30,23 @@ public class NavAI : MonoBehaviour
         if (distanceToPlayer < attackRange)
         {
             isAttackingPlayer = true;
-            agent.SetDestination(player.position); // Oyuncuya doðru hareket et
+            if (_endNavigationTarget != player.position)
+            {
+                _endNavigationTarget = player.position;
+                agent.SetDestination(_endNavigationTarget); // Oyuncuya doðru hareket et
+
+            }
         }
         else
         {
             isAttackingPlayer = false;
             if (agent.destination != house.position)
             {
-                agent.SetDestination(house.position); // Eðer oyuncu uzaktaysa eve geri git
+                if (_endNavigationTarget != house.position)
+                {
+                    _endNavigationTarget = house.position;
+                    agent.SetDestination(_endNavigationTarget);
+                }// Eðer oyuncu uzaktaysa eve geri git
             }
         }
 
